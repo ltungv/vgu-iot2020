@@ -1,36 +1,44 @@
-#include <BH1750.h>
 #include <Arduino.h>
+#include <BH1750.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
+
 #include "LED.hpp"
 #include "Timer.hpp"
 
+// Initialize light sensor
 BH1750 lightSensor(0x23);
+
+// Initialize LCD
 LiquidCrystal_I2C lcd(0x3F, 20, 4);
 
 void setup()
 {
 	pinMode(LED_BUILTIN, OUTPUT);
 
-	Wire.begin();
+	Wire.begin(); // manually start Wire protocol
+
+	// The sensor will only take a measurement when we ask it to do so, using HIGH_RES_MODE
 	lightSensor.begin(BH1750::ONE_TIME_HIGH_RES_MODE);
 
+	// Start LCD
 	lcd.init();
 	lcd.backlight();
 	lcd.display();
 }
 
 Timer lightSensorTimer(5000, true);
-
 bool updateLCD = true;
 float latestLux = 0;
 int latestVol = 0;
 
 void loop()
 {
-	lightSensorTimer.count();
-	if (lightSensorTimer.isFinish())
+	// Measure light meter and check if it finished
+	lightSensorTimer.tick();
+	if (lightSensorTimer.finished())
 	{
+		// LED is blinked 3 times when measuring luminosity
 		LED::blink(LED_BUILTIN, 100, 100, 3);
 		latestLux = lightSensor.readLightLevel();
 		updateLCD = true;

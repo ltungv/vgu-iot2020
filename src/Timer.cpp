@@ -13,7 +13,7 @@ void Timer::reset()
   this->millisRemaing = millisInterval;
 }
 
-void Timer::count()
+void Timer::tick()
 {
   /*
    * Update the remaining time using the time duration since it is last updated
@@ -35,7 +35,7 @@ void Timer::count()
   this->millisLastUpdate = millisCurrent;
 }
 
-bool Timer::isFinish()
+bool Timer::finished()
 {
   /*
    * Check if the timer is finish
