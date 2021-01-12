@@ -7,7 +7,9 @@
 namespace LED
 {
 
-    void blink(int digitalPin, int millisOnDuration, int millisOffDuration,
+    void blink(int digitalPin,
+               int millisOnDuration,
+               int millisOffDuration,
                int times);
 
 } // namespace LED
